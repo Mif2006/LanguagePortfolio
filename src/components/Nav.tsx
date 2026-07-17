@@ -4,15 +4,30 @@ import { useLang } from "@/lib/i18n";
 export default function Nav() {
   const { t, lang, setLang } = useLang();
   const [scrolled, setScrolled] = useState(false);
+  const [langTheme, setLangTheme] = useState<{ bg: string; border: string } | null>(null);
 
   useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 40);
-    on();
-    window.addEventListener("scroll", on);
-    return () => window.removeEventListener("scroll", on);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    
+    // Listen for custom events dispatched by the Languages component
+    const handleThemeChange = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail.inView) {
+        setLangTheme(customEvent.detail.theme);
+      } else {
+        setLangTheme(null);
+      }
+    };
+    window.addEventListener("langSectionView", handleThemeChange);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("langSectionView", handleThemeChange);
+    };
   }, []);
 
-  // Updated duration to 800ms for a snappier, more responsive feel
   const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const element = document.querySelector(id);
@@ -47,14 +62,15 @@ export default function Nav() {
     ["#contact", "Контакты"],
   ];
 
+  // Determine the dynamic background and border based on section visibility
+  const headerStyle = scrolled 
+    ? langTheme 
+      ? `${langTheme.bg} backdrop-blur-xl border-b ${langTheme.border}` 
+      : "bg-[#eff8fb]/80 backdrop-blur-xl border-b border-[#e1f0f3]"
+    : "bg-transparent border-b border-transparent";
+
   return (
-    <header
-      className={`fixed w-screen max-w-screen top-0 z-50 w-full transition-all duration-500 ${
-        scrolled 
-          ? "bg-[#eff8fb]/80 backdrop-blur-xl border-b border-[#e1f0f3]" 
-          : "bg-transparent"
-      }`}
-    >
+    <header className={`fixed top-0 z-50 w-screen max-w-screen transition-colors duration-1000 ease-in-out ${headerStyle}`}>
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 md:px-10">
         
         <a 
@@ -81,7 +97,7 @@ export default function Nav() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1 rounded-full border border-[#e1f0f3] bg-white p-1 text-xs shadow-sm">
+        <div className="flex items-center gap-1 rounded-full border border-[#e1f0f3] bg-white p-1 text-xs shadow-sm transition-colors duration-1000">
           {(["ru", "en"] as const).map((l) => (
             <button
               key={l}

@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,17 +12,33 @@ export default function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".hero-word", {
+      // Using a timeline to ensure a single, snappy, cohesive motion 
+      // without any sluggish initial delays or hesitation.
+      const tl = gsap.timeline();
+
+      tl.from(".hero-word", {
         yPercent: 110,
-        duration: 1.1,
+        duration: 1,
         ease: "expo.out",
-        stagger: 0.08,
-        delay: 0.2,
-      });
-      gsap.from(".hero-fade", { opacity: 0, y: 20, duration: 1, ease: "power3.out", stagger: 0.15, delay: 0.9 });
-      gsap.from(".hero-portrait-wrapper", { scale: 1.05, opacity: 0, duration: 1.6, ease: "expo.out", delay: 0.1 });
+      })
+      .from(".hero-fade", { 
+        opacity: 0, 
+        y: 30, 
+        duration: 1, 
+        stagger: 0.1, 
+        ease: "expo.out" 
+      }, "<0.1") // Triggers just 0.1s after the word starts
+      .from(".hero-portrait-wrapper", { 
+        scale: 1.05, 
+        y: 30,
+        opacity: 0, 
+        duration: 1, 
+        ease: "expo.out" 
+      }, "<0.1");
+
+      // Parallax scroll effect
       gsap.to(".hero-portrait-wrapper", {
-        yPercent: 8,
+        yPercent: 12,
         ease: "none",
         scrollTrigger: {
           trigger: root.current,
@@ -32,42 +47,40 @@ export default function Hero() {
           scrub: true,
         },
       });
-      gsap.to(".hero-marquee-inner", { xPercent: -50, duration: 30, ease: "none", repeat: -1 });
     }, root);
     return () => ctx.revert();
   }, [lang]);
 
   return (
-    <section ref={root} id="top" className="relative min-h-[100svh] overflow-hidden bg-gray-300 [#FDFBF7] text-[#1A1614] md:min-h-screen">
+    <section ref={root} id="top" className="relative min-h-[100svh] overflow-hidden bg-[#eff8fb] text-[#1A1614] md:min-h-screen">
       
-      {/* Lightened Background Overlay */}
+      {/* Lightened Background Overlay - perfectly blended into our brand background */}
       <div
         className="absolute inset-0 -z-10"
         style={{
-          backgroundImage: `linear-gradient(180deg, rgba(253,251,247,0.7), rgba(253,251,247,1)), url(${heroBg.url})`,
+          backgroundImage: `linear-gradient(180deg, rgba(239,248,251,0.85), rgba(239,248,251,1)), url(${heroBg.url})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       />
 
-      <div className="mx-auto grid min-h-[100svh] max-w-[1400px] grid-cols-1 content-center gap-12 px-6 pb-32 pt-28 md:min-h-screen md:grid-cols-12 md:items-center md:gap-10 md:px-10 md:pb-24 md:pt-32">
-        <div className="md:col-span-7">
+      <div className="mx-auto grid min-h-[100svh] max-w-[1400px] grid-cols-1 content-center gap-12 px-6 pb-24 pt-32 md:min-h-screen md:grid-cols-12 md:items-center md:gap-10 md:px-10">
+        <div className="flex flex-col items-start md:col-span-7">
           
-          {/* Kicker */}
-          <div className="hero-fade mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 md:mb-8">
-            <span className="h-px w-8 bg-blue-600" />
+          {/* Pill Kicker */}
+          <div className="hero-fade mb-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#e1f0f3] px-5 py-2 text-xs font-bold uppercase tracking-widest text-slate-700 md:mb-8">
             {t("heroKicker")}
           </div>
 
           {/* Main Title */}
-          <h1 className="font-display text-[clamp(4rem,15vw,9rem)] leading-[0.95] tracking-tight md:text-[clamp(4rem,10vw,9rem)]">
-            <span className="block overflow-hidden">
+          <h1 className="font-sans text-[clamp(4.5rem,13vw,9rem)] font-extrabold leading-[0.95] tracking-tight text-[#1A1614] md:text-[clamp(5rem,10vw,10rem)]">
+            <span className="block overflow-hidden pb-2">
               <span className="hero-word inline-block">Ярослав</span>
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="hero-fade mt-6 max-w-lg text-lg text-slate-600 md:mt-8">
+          <p className="hero-fade mt-6 max-w-lg text-base leading-relaxed text-slate-500 sm:text-lg md:mt-8 md:text-xl">
             {t("heroSub")}
           </p>
 
@@ -75,34 +88,33 @@ export default function Hero() {
           <div className="hero-fade mt-8 flex flex-wrap items-center gap-4 md:mt-10">
             <a
               href="#contact"
-              className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-blue-600 px-7 py-4 text-sm font-medium text-white transition-all hover:gap-5 hover:bg-blue-700"
+              className="group relative inline-flex items-center justify-center gap-2 rounded-full bg-[#007AFF] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] hover:bg-blue-600 hover:shadow-blue-500/30 active:scale-[0.98]"
             >
               <span>{t("heroCta")}</span>
-              <span className="transition-transform group-hover:translate-x-1">→</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </a>
-            <a href="#languages" className="text-sm font-medium text-slate-500 transition-colors hover:text-blue-600">
+            
+            <a 
+              href="#languages" 
+              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-bold text-slate-500 shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-300 hover:text-[#1A1614] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] active:scale-[0.98]"
+            >
               EN · FR · ES
             </a>
           </div>
         </div>
 
-        {/* Portrait Container */}
-        <div className="flex justify-center md:col-span-5">
+        {/* Portrait Container - Clean, modern shape without harsh border lines */}
+        <div className="flex justify-center md:col-span-5 md:justify-end">
           <div className="hero-portrait-wrapper relative aspect-[3/4] w-full max-w-[340px] md:max-w-[420px]">
-            <div className="h-full w-full overflow-hidden rounded-2xl shadow-xl shadow-slate-200/50">
+            <div className="h-full w-full overflow-hidden rounded-3xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] transition-transform duration-700 hover:scale-[1.02]">
               <img
                 src="/Me1.png"
-                alt="Yaroslav"
+                alt="Ярослав"
                 className="h-full w-full object-cover"
                 width={1200}
                 height={1600}
               />
-              {/* The gradient div has been completely removed from here */}
             </div>
-            
-            {/* Corner Accents */}
-            <div className="pointer-events-none absolute -left-4 -top-4 h-12 w-12 border-l border-t border-blue-400 transition-transform duration-500 hover:scale-110 md:-left-8 md:-top-8 md:h-16 md:w-16" />
-            <div className="pointer-events-none absolute -bottom-4 -right-4 h-12 w-12 border-b border-r border-blue-400 transition-transform duration-500 hover:scale-110 md:-bottom-8 md:-right-8 md:h-16 md:w-16" />
           </div>
         </div>
       </div>
