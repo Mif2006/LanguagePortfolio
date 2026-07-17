@@ -12,47 +12,84 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", on);
   }, []);
 
-  const links: Array<[string, keyof typeof import("@/lib/i18n").dict]> = [
-    ["#about", "navAbout"],
-    ["#languages", "navLanguages"],
-    ["#pricing", "navPricing"],
-    ["#contact", "navContact"],
+  // Updated duration to 800ms for a snappier, more responsive feel
+  const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.querySelector(id);
+    if (!element) return;
+
+    const startPosition = window.scrollY;
+    const targetPosition = element.getBoundingClientRect().top + window.scrollY;
+    const distance = targetPosition - startPosition;
+    const duration = 800; 
+    let start: number | null = null;
+
+    function animation(currentTime: number) {
+      if (start === null) start = currentTime;
+      const timeElapsed = currentTime - start;
+      const progress = Math.min(timeElapsed / duration, 1);
+
+      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      window.scrollTo(0, startPosition + distance * ease);
+
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    }
+    requestAnimationFrame(animation);
+  };
+
+  const links = [
+    ["#about", "О Уроках"],
+    ["#languages", "Языки"],
+    ["#formats", "Форматы"],
+    ["#contact", "Контакты"],
   ];
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-        scrolled ? "bg-background/70 backdrop-blur-xl border-b border-border/40" : "bg-transparent"
+      className={`fixed w-screen max-w-screen top-0 z-50 w-full transition-all duration-500 ${
+        scrolled 
+          ? "bg-[#eff8fb]/80 backdrop-blur-xl border-b border-[#e1f0f3]" 
+          : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 md:px-10">
-        <a href="#top" className="group flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-ember/60 font-display text-lg text-ember transition-transform group-hover:rotate-12">
-            M
+        
+        <a 
+          href="#top" 
+          onClick={(e) => smoothScroll(e, "#top")}
+          className="group flex items-center gap-3"
+        >
+          <span className="grid h-9 w-9 place-items-center rounded-full border-2 border-[#007AFF] font-sans text-lg font-bold text-[#007AFF] transition-transform group-hover:scale-105">
+            Я
           </span>
-          <span className="font-display text-lg tracking-tight">Milan Frolov</span>
+          <span className="font-sans text-lg font-extrabold tracking-tight text-[#1A1614]">Ярослав</span>
         </a>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {links.map(([href, key]) => (
+          {links.map(([href, label]) => (
             <a
               key={href}
               href={href}
-              className="group relative text-sm text-muted-foreground transition-colors hover:text-foreground"
+              onClick={(e) => smoothScroll(e, href)}
+              className="group relative text-sm font-bold text-slate-500 transition-colors hover:text-[#1A1614]"
             >
-              {t(key)}
-              <span className="absolute -bottom-1 left-0 h-px w-0 bg-ember transition-all duration-300 group-hover:w-full" />
+              {label}
             </a>
           ))}
         </nav>
 
-        <div className="flex items-center gap-1 rounded-full border border-border/60 p-1 text-xs">
+        <div className="flex items-center gap-1 rounded-full border border-[#e1f0f3] bg-white p-1 text-xs shadow-sm">
           {(["ru", "en"] as const).map((l) => (
             <button
               key={l}
               onClick={() => setLang(l)}
-              className={`rounded-full px-3 py-1 uppercase tracking-widest transition-all ${
-                lang === l ? "bg-ember text-ink" : "text-muted-foreground hover:text-foreground"
+              className={`rounded-full px-4 py-1.5 font-bold uppercase tracking-widest transition-all ${
+                lang === l 
+                  ? "bg-[#007AFF] text-white" 
+                  : "text-slate-400 hover:text-[#1A1614]"
               }`}
             >
               {l}
