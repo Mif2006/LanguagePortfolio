@@ -97,7 +97,7 @@ export default function Nav() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1 rounded-full border border-[#e1f0f3] bg-white p-1 text-xs shadow-sm transition-colors duration-1000">
+        {/* <div className="flex items-center gap-1 rounded-full border border-[#e1f0f3] bg-white p-1 text-xs shadow-sm transition-colors duration-1000">
           {(["ru", "en"] as const).map((l) => (
             <button
               key={l}
@@ -111,7 +111,7 @@ export default function Nav() {
               {l}
             </button>
           ))}
-        </div>
+        </div> */}
       </div>
     </header>
   );
