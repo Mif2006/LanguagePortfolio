@@ -151,7 +151,6 @@ export default function Languages() {
       id="languages" 
       className={`relative transition-colors duration-1000 ease-in-out py-16 md:py-24 lg:py-32 ${currTheme.bg} overflow-hidden`}
     >
-      {/* CSS For hardware-accelerated Marquees and Fading Edges */}
       <style>{`
         @keyframes marquee-l {
           0% { transform: translateX(0); }
@@ -161,19 +160,10 @@ export default function Languages() {
           0% { transform: translateX(-50%); }
           100% { transform: translateX(0); }
         }
-        .animate-marquee-left {
-          /* Increased duration from 40s to 70s */
-          animation: marquee-l 70s linear infinite;
-        }
-        .animate-marquee-right {
-          /* Increased duration from 40s to 70s */
-          animation: marquee-r 70s linear infinite;
-        }
-        .pause-on-hover:hover {
-          animation-play-state: paused;
-        }
+        .animate-marquee-left { animation: marquee-l 70s linear infinite; }
+        .animate-marquee-right { animation: marquee-r 70s linear infinite; }
+        .pause-on-hover:hover { animation-play-state: paused; }
         .mask-linear-fade {
-          /* Adds a smooth fade-out effect on the left and right edges */
           mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
           -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
@@ -196,26 +186,24 @@ export default function Languages() {
           </div>
         </div>
 
-        {/* Tab Selector */}
-        <div className={`lang-head mb-12 flex flex-col gap-2 rounded-2xl p-1.5 transition-colors duration-1000 sm:inline-flex sm:flex-row sm:rounded-full sm:p-2 md:mb-16 lg:mb-20 ${currTheme.featureCard}`}>
+        {/* Updated Tab Selector: Flex Wrap for Pyramid/Mobile Layout */}
+        <div className={`lang-head mb-12 flex flex-wrap gap-2 rounded-2xl p-1.5 transition-colors duration-1000 sm:inline-flex sm:flex-row sm:rounded-full sm:p-2 md:mb-16 lg:mb-20 ${currTheme.featureCard}`}>
           {items.map((it, i) => (
             <button
               key={it.code}
               onClick={() => setActive(i)}
-              className={`relative flex w-full items-center justify-center gap-3 rounded-xl px-5 py-3 text-sm font-bold transition-all duration-300 sm:w-auto sm:rounded-full sm:px-8 ${
+              className={`relative flex flex-1 items-center justify-center gap-3 rounded-xl px-5 py-3 text-sm font-bold transition-all duration-300 sm:flex-none sm:rounded-full sm:px-8 ${
                 active === i ? currTheme.activeBtn : currTheme.inactiveBtn
               }`}
             >
               <span className="text-xl leading-none">{it.flag}</span>
-              <span className="tracking-wide">{it.title}</span>
+              <span className="tracking-wide whitespace-nowrap">{it.title}</span>
             </button>
           ))}
         </div>
 
         {/* Dynamic Text-Based Panel Layout */}
         <div className="lang-dynamic-content grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16" key={active}>
-          
-          {/* Left Side: Big Title & Meta */}
           <div className="flex flex-col items-start lg:col-span-5">
             <div className={`mb-6 inline-flex rounded-full px-5 py-2 text-sm font-bold ${currTheme.pill}`}>
               {currItem.tag}
@@ -240,26 +228,20 @@ export default function Languages() {
             </div>
           </div>
 
-          {/* Right Side: Description & Marquee Features */}
           <div className="flex w-full flex-col justify-center overflow-hidden lg:col-span-7 lg:pl-10">
             <p className={`text-lg font-medium leading-relaxed sm:text-xl md:text-2xl ${currTheme.textMuted}`}>
               {currItem.desc}
             </p>
             
-            {/* Infinite Marquee Carousel Container - Increased top margin and gap between rows */}
             <div className="mt-12 flex flex-col gap-6 lg:mt-16">
-              
-              {/* Row 1 (Moves Left) */}
               <div className="relative flex w-full overflow-hidden mask-linear-fade py-2">
                 <div className="animate-marquee-left pause-on-hover flex w-max gap-5 md:gap-6">
                   {[...row1, ...row1].map((feature, idx) => (
                     <div 
                       key={idx} 
-                      /* Taller items: py-4 md:py-5, larger text */
                       className={`flex w-max items-center gap-3 md:gap-4 rounded-full px-6 py-4 md:px-8 md:py-5 transition-colors duration-300 ${currTheme.featureCard}`}
                     >
                       <div className={`shrink-0 rounded-full bg-white p-2 shadow-sm ${currTheme.textMuted}`}>
-                        {/* Slightly larger icon */}
                         <svg className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
@@ -272,13 +254,11 @@ export default function Languages() {
                 </div>
               </div>
 
-              {/* Row 2 (Moves Right) */}
               <div className="relative flex w-full overflow-hidden mask-linear-fade py-2">
                 <div className="animate-marquee-right pause-on-hover flex w-max gap-5 md:gap-6">
                   {[...row2, ...row2].map((feature, idx) => (
                     <div 
                       key={idx} 
-                      /* Taller items: py-4 md:py-5, larger text */
                       className={`flex w-max items-center gap-3 md:gap-4 rounded-full px-6 py-4 md:px-8 md:py-5 transition-colors duration-300 ${currTheme.featureCard}`}
                     >
                       <div className={`shrink-0 rounded-full bg-white p-2 shadow-sm ${currTheme.textMuted}`}>
@@ -293,10 +273,8 @@ export default function Languages() {
                   ))}
                 </div>
               </div>
-
             </div>
           </div>
-          
         </div>
       </div>
     </section>

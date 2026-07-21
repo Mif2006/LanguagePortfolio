@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Милан Фролов — репетитор английского, французского и испанского" },
+      { title: "Ярослав — репетитор английского, французского и испанского" },
       {
         name: "description",
         content:
-          "Милан Фролов, 20 лет — репетитор английского (C1), французского и испанского (B2) в Минске. Индивидуально и в мини-группах.",
+          "Ярослав— репетитор английского (C1), французского и испанского (B2) в Минске. Индивидуально и в мини-группах.",
       },
-      { name: "author", content: "Milan Frolov" },
-      { property: "og:title", content: "Милан Фролов · Языковой репетитор" },
+      { name: "author", content: "Ярослав" },
+      { property: "og:title", content: "Ярослав · Языковой репетитор" },
       {
         property: "og:description",
         content: "English · Français · Español. Индивидуально и в мини-группах.",
