@@ -10,6 +10,34 @@ export default function Hero() {
   const { t, lang } = useLang();
   const root = useRef<HTMLDivElement>(null);
 
+  const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.querySelector(id);
+    if (!element) return;
+
+    const startPosition = window.scrollY;
+    const targetPosition = element.getBoundingClientRect().top + window.scrollY;
+    const distance = targetPosition - startPosition;
+    const duration = 800; 
+    let start: number | null = null;
+
+    function animation(currentTime: number) {
+      if (start === null) start = currentTime;
+      const timeElapsed = currentTime - start;
+      const progress = Math.min(timeElapsed / duration, 1);
+
+      // Easing function for smooth deceleration
+      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      window.scrollTo(0, startPosition + distance * ease);
+
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    }
+    requestAnimationFrame(animation);
+  };
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Using a timeline to ensure a single, snappy, cohesive motion 
@@ -88,6 +116,7 @@ export default function Hero() {
           <div className="hero-fade mt-8 flex flex-wrap items-center gap-4 md:mt-10">
             <a
               href="#contact"
+              onClick={(e) => smoothScroll(e, "#contact")}
               className="group relative inline-flex items-center justify-center gap-2 rounded-full bg-[#007AFF] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] hover:bg-blue-600 hover:shadow-blue-500/30 active:scale-[0.98]"
             >
               <span>{t("heroCta")}</span>
@@ -96,6 +125,7 @@ export default function Hero() {
             
             <a 
               href="#languages" 
+              onClick={(e) => smoothScroll(e, "#languages")}
               className="inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-bold text-slate-500 shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-300 hover:text-[#1A1614] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] active:scale-[0.98]"
             >
               EN · FR · ES

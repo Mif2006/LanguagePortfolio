@@ -90,7 +90,6 @@ export default function Methodology() {
     <section 
       ref={sectionRef} 
       id="about" 
-      // Matching the fresh, airy blue background
       className="relative bg-[#eff8fb] py-24 text-[#1A1614] md:py-32"
     >
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-10">
@@ -109,7 +108,7 @@ export default function Methodology() {
               Меньше теории, <br className="hidden md:block" />
               <span className="text-[#ff9900]">больше дела.</span>
             </h2>
-            <p className="mt-6 text-lg leading-relaxed text-slate-600 md:text-xl md:mt-8">
+            <p className="mt-6 text-lg leading-relaxed text-slate-600 md:mt-8 md:text-xl">
               Язык — это инструмент, а не школьный предмет. Мы не будем зубрить правила ради правил. Мы будем учиться общаться свободно и с удовольствием.
             </p>
           </div>
@@ -142,19 +141,23 @@ export default function Methodology() {
 
         </div>
 
-        {/* Stats Footer */}
-        <div className="stats-container mt-24 grid grid-cols-2 gap-8 border-t border-[#e1f0f3] pt-16 md:mt-32 md:grid-cols-4">
+        {/* Upgraded Stats Footer Panel */}
+        <div className="stats-container mt-24 grid grid-cols-1 overflow-hidden rounded-3xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:grid-cols-3 md:mt-32">
           {[
-            { num: "4", label: "Языка" },
+            { num: "3", label: "Языка" },
             { num: "C1", label: "Английский" },
             { num: "B2", label: "Французский / Испанский" },
-            { num: "100%", label: "Практики на уроках" },
           ].map((stat, i) => (
-            <div key={i} className="method-stat flex flex-col">
-              <span className="font-sans text-4xl font-extrabold text-[#1A1614] md:text-5xl lg:text-6xl">
+            <div 
+              key={i} 
+              className={`method-stat flex flex-col items-center justify-center p-8 text-center sm:p-10 lg:p-12 ${
+                i !== 2 ? 'border-b border-[#eff8fb] sm:border-b-0 sm:border-r' : ''
+              }`}
+            >
+              <span className="font-sans text-5xl font-extrabold text-[#007AFF] md:text-6xl lg:text-7xl">
                 {stat.num}
               </span>
-              <span className="mt-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 sm:text-xs">
+              <span className="mt-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 sm:text-xs">
                 {stat.label}
               </span>
             </div>

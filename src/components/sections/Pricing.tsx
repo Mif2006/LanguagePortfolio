@@ -38,6 +38,34 @@ export default function Pricing() {
     },
   ];
 
+  const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.querySelector(id);
+    if (!element) return;
+
+    const startPosition = window.scrollY;
+    const targetPosition = element.getBoundingClientRect().top + window.scrollY;
+    const distance = targetPosition - startPosition;
+    const duration = 800; 
+    let start: number | null = null;
+
+    function animation(currentTime: number) {
+      if (start === null) start = currentTime;
+      const timeElapsed = currentTime - start;
+      const progress = Math.min(timeElapsed / duration, 1);
+
+      // Easing function for smooth deceleration
+      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      window.scrollTo(0, startPosition + distance * ease);
+
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    }
+    requestAnimationFrame(animation);
+  };
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -132,6 +160,7 @@ export default function Pricing() {
               {/* Call to Action Button */}
               <a
                 href="#contact"
+                onClick={(e) => smoothScroll(e, "#contact")}
                 className="mt-auto flex w-full items-center justify-center gap-2 rounded-2xl bg-[#eff8fb] px-6 py-4 text-base font-bold text-slate-600 transition-all duration-300 hover:scale-[1.02] hover:bg-[#007AFF] hover:text-white hover:shadow-lg hover:shadow-blue-500/30 active:scale-[0.98]"
               >
                 <span>Записаться на пробное</span>
