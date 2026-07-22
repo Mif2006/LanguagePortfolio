@@ -147,7 +147,7 @@ export default function Nav() {
 
       {/* Mobile Sidebar Panel */}
       <div 
-        className={`fixed right-0 top-0 z-50 flex h-[100svh] w-[85vw] max-w-[360px] flex-col overflow-y-auto bg-white px-8 pb-12 pt-28 shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden ${
+        className={`fixed right-0 top-0 z-50 flex h-screen w-[85vw] max-w-[360px] flex-col overflow-y-auto bg-white px-8 pb-12 pt-28 shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
